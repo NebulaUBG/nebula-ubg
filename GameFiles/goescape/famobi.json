@@ -1,0 +1,22 @@
+{
+  "interstitial": {
+    "eventIds": [
+    ],
+    "blocklist": [
+      "break:*"
+    ],
+    "allowlist": [
+      "*"
+    ]
+  },
+  "rewarded": {
+    "allowEmpty": true,
+    "blocklist": [
+      
+    ],
+    "allowlist": [
+      "*"
+    ]
+  },
+  "isLevelBased": true
+}
