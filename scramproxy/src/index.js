@@ -8,11 +8,15 @@ import { scramjetPath } from "@mercuryworkshop/scramjet/path";
 import { libcurlPath } from "@mercuryworkshop/libcurl-transport";
 import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
-// Paths
-const siteRoot = fileURLToPath(new URL("../../", import.meta.url));  // your root site
+// =======================
+// PATHS
+// =======================
+const siteRoot = fileURLToPath(new URL("../../", import.meta.url));  // root site
 const publicPath = fileURLToPath(new URL("../public/", import.meta.url)); // Scramjet frontend
 
-// Wisp config
+// =======================
+// WISP CONFIG
+// =======================
 logging.set_level(logging.NONE);
 Object.assign(wisp.options, {
   allow_udp_streams: false,
@@ -20,7 +24,9 @@ Object.assign(wisp.options, {
   dns_servers: ["1.1.1.3", "1.0.0.3"],
 });
 
-// Fastify server
+// =======================
+// FASTIFY SERVER
+// =======================
 const fastify = Fastify({
   serverFactory: (handler) => {
     return createServer()
@@ -40,40 +46,35 @@ const fastify = Fastify({
 // STATIC FILES
 // =======================
 
-// 1️⃣ Root site (decorateReply: true)
+// 1️⃣ Root site (/)
 fastify.register(fastifyStatic, {
   root: siteRoot,
-  decorateReply: true, // only once
+  decorateReply: true, // only one decorateReply
 });
 
-// 2️⃣ Scramjet frontend (/scramjet/) (decorateReply: false)
+// 2️⃣ Scramjet frontend (/scramjet/*) with wildcard for encoded URLs
 fastify.register(fastifyStatic, {
   root: publicPath,
   prefix: "/scramjet/",
-  decorateReply: false,
+  decorateReply: false, // no duplicate decorateReply
+  wildcard: true,       // handles /scramjet/encodedURLs
 });
 
-// 3️⃣ Catch-all for dynamic URLs under /scramjet/*
-// Always serve index.html for Scramjet frontend to handle encoded URLs
-fastify.get("/scramjet/*", (req, reply) => {
-  return reply.sendFile("index.html", publicPath); // serve Scramjet frontend
-});
-
-// 4️⃣ Scramjet internals (/scram/)
+// 3️⃣ Scramjet internals (/scram/)
 fastify.register(fastifyStatic, {
   root: scramjetPath,
   prefix: "/scram/",
   decorateReply: false,
 });
 
-// 5️⃣ libcurl (/libcurl/)
+// 4️⃣ libcurl (/libcurl/)
 fastify.register(fastifyStatic, {
   root: libcurlPath,
   prefix: "/libcurl/",
   decorateReply: false,
 });
 
-// 6️⃣ baremux (/baremux/)
+// 5️⃣ baremux (/baremux/)
 fastify.register(fastifyStatic, {
   root: baremuxPath,
   prefix: "/baremux/",
