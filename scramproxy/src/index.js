@@ -36,9 +36,11 @@ const fastify = Fastify({
 });
 
 fastify.register(fastifyStatic, {
-	root: publicPath,
-	decorateReply: true,
+  root: scramjetPath,
+  prefix: "/scram/",
+  decorateReply: false,
 });
+
 
 fastify.register(fastifyStatic, {
 	root: scramjetPath,
