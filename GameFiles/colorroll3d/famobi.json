@@ -1,0 +1,25 @@
+{
+	"interstitial": {
+		"eventIds": [
+		],
+		"blocklist": [
+			"break:*"
+		],
+		"allowlist": [
+			"*"
+		]
+	},
+	"rewarded": {
+		"allowEmpty": true,
+		"eventIds": [
+			"button:game:hint",
+			"button:speciallevelscreen:play"
+		],
+		"blocklist": [
+			
+		],
+		"allowlist": [
+			"*"
+		]
+	}
+}
