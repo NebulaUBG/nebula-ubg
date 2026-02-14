@@ -9,9 +9,9 @@ import { scramjetPath } from "@mercuryworkshop/scramjet/path";
 import { libcurlPath } from "@mercuryworkshop/libcurl-transport";
 import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
-// FIXED PATHS
-const customFrontendPath = fileURLToPath(new URL("../../", import.meta.url));
-const proxyEnginePath = fileURLToPath(new URL("../public/", import.meta.url));
+const publicPath = fileURLToPath(new URL("../../", import.meta.url));
+
+// Wisp Configuration: Refer to the documentation at https://www.npmjs.com/package/@mercuryworkshop/wisp-js
 
 logging.set_level(logging.NONE);
 Object.assign(wisp.options, {
@@ -35,17 +35,9 @@ const fastify = Fastify({
 	},
 });
 
-// FIXED REGISTRATION: Merged roots with wildcard protection to prevent "Method already declared"
 fastify.register(fastifyStatic, {
-	root: customFrontendPath,
+	root: publicPath,
 	decorateReply: true,
-});
-
-fastify.register(fastifyStatic, {
-	root: proxyEnginePath,
-	prefix: "/", 
-	decorateReply: false, 
-	wildcard: false, // This fixes the Method 'HEAD' already declared error
 });
 
 fastify.register(fastifyStatic, {
@@ -66,14 +58,23 @@ fastify.register(fastifyStatic, {
 	decorateReply: false,
 });
 
-fastify.setNotFoundHandler((req, reply) => {
+fastify.setNotFoundHandler((res, reply) => {
 	return reply.code(404).type("text/html").sendFile("404.html");
 });
 
 fastify.server.on("listening", () => {
 	const address = fastify.server.address();
+
+	// by default we are listening on 0.0.0.0 (every interface)
+	// we just need to list a few
 	console.log("Listening on:");
 	console.log(`\thttp://localhost:${address.port}`);
+	console.log(`\thttp://${hostname()}:${address.port}`);
+	console.log(
+		`\thttp://${
+			address.family === "IPv6" ? `[${address.address}]` : address.address
+		}:${address.port}`
+	);
 });
 
 process.on("SIGINT", shutdown);
@@ -86,6 +87,7 @@ function shutdown() {
 }
 
 let port = parseInt(process.env.PORT || "");
+
 if (isNaN(port)) port = 8080;
 
 fastify.listen({
