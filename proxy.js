@@ -55,4 +55,3 @@ input?.addEventListener("keydown", e => {
     openProxy(input.value);
   }
 });
-

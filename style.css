@@ -26,7 +26,7 @@ body{
 }
 
 .nav-btn{
-  background-color: #0d318083;
+  background-color: #12017d;
   color: white;
   padding: 10px;
   border-radius: 10px;
@@ -36,12 +36,12 @@ body{
 }
 
 .nav-btn:hover{
-    background: #1551d375;
+    background: #0072f2;
 }
 
 .game-btn{
   display: flexbox;
-  background-color: #0e294b;
+  background-color: #12017d;
   color: white;
   border-radius: 10px;
   padding:15px;
@@ -52,11 +52,11 @@ body{
 }
 
 .game-btn:hover{
-  background-color: #2973ce;
+  background-color: #0072f2;
 }
 
 .uni-btn{
-   background-color: #0e294b;
+   background-color: #12017d;
   color: white;
   border-radius: 10px;
   padding:15px;
@@ -67,11 +67,11 @@ body{
 }
 
 .uni-btn:hover{
-  background-color: #2973ce;
+  background-color: #0072f2;
 }
 
 .fullscreen-btn{
-   background-color: #0e294b;
+   background-color: #12017d;
   color: white;
   border-radius: 10px;
   padding:15px;
@@ -82,7 +82,7 @@ body{
 }
 
 .fullscreen-btn:hover{
-  background-color: #2973ce;
+  background-color: #12017d;
 }
 
 .games{
