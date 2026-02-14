@@ -9,7 +9,7 @@ import { scramjetPath } from "@mercuryworkshop/scramjet/path";
 import { libcurlPath } from "@mercuryworkshop/libcurl-transport";
 import { baremuxPath } from "@mercuryworkshop/bare-mux/node";
 
-// FIXED PATHS: One for your site (root), one for proxy guts (public)
+// FIXED PATHS
 const customFrontendPath = fileURLToPath(new URL("../../", import.meta.url));
 const proxyEnginePath = fileURLToPath(new URL("../public/", import.meta.url));
 
@@ -35,7 +35,7 @@ const fastify = Fastify({
 	},
 });
 
-// FIXED REGISTRATION: Serve root site first, then proxy files
+// FIXED REGISTRATION: Merged roots with wildcard protection to prevent "Method already declared"
 fastify.register(fastifyStatic, {
 	root: customFrontendPath,
 	decorateReply: true,
@@ -45,6 +45,7 @@ fastify.register(fastifyStatic, {
 	root: proxyEnginePath,
 	prefix: "/", 
 	decorateReply: false, 
+	wildcard: false, // This fixes the Method 'HEAD' already declared error
 });
 
 fastify.register(fastifyStatic, {
@@ -65,7 +66,7 @@ fastify.register(fastifyStatic, {
 	decorateReply: false,
 });
 
-fastify.setNotFoundHandler((res, reply) => {
+fastify.setNotFoundHandler((req, reply) => {
 	return reply.code(404).type("text/html").sendFile("404.html");
 });
 
