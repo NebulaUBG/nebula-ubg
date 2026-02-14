@@ -3,7 +3,7 @@
 // ================================
 
 // CHANGE THIS to your Scramjet backend
-const PROXY_BASE = "scramproxy/scramjet/";
+const PROXY_BASE = "/scramjet/";
 
 // Call this with the value from your search bar
 function openProxy(input) {
@@ -55,3 +55,4 @@ input?.addEventListener("keydown", e => {
     openProxy(input.value);
   }
 });
+
